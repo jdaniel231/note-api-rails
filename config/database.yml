@@ -85,7 +85,4 @@ test:
 #
 production:
   <<: *default
-  database: backend_production
-  user: postgres
-  password: postgres
-  host: localhost
+  url: <%= ENV["DATABASE_URL"] %>
