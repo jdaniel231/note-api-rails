@@ -3,12 +3,17 @@ class UsersController < ApplicationController
 
   # REGISTER
   def create
-    @user = User.create(user_params)
-    if @user.valid?
-      token = encode_token({user_id: @user.id})
-      render json: {user: @user, token: token}
+    if valid_email?(params[:username])
+      @user = User.new(user_params)
+      @user.role ||= 'client' # Definir valor padrão para role
+      if @user.save
+        token = encode_token({user_id: @user.id})
+        render json: {user: @user, token: token}
+      else
+        render json: {error: "Invalid username or password"}
+      end
     else
-      render json: {error: "Invalid username or password"}
+      render json: {error: "Invalid email format"}
     end
   end
 
@@ -24,7 +29,6 @@ class UsersController < ApplicationController
     end
   end
 
-
   def auto_login
     render json: @user
   end
@@ -32,6 +36,10 @@ class UsersController < ApplicationController
   private
 
   def user_params
-    params.permit(:username, :password, :age)
+    params.permit(:username, :password, :age, :role)
+  end
+
+  def valid_email?(email)
+    /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i.match?(email)
   end
 end
