@@ -8,4 +8,22 @@
 #     MovieGenre.find_or_create_by!(name: genre_name)
 #   end
 
-User.create(username: "admin@admin.com", password: "123456", role: "admin")
+# User.create(username: "admin@outlabs.com", password: "123456", role: "admin")
+# Company.create(name: "Outlabs", email: "root@outlabs.com", phone: "1234567890", user_id: 19)
+
+# group = Group.create(name: 'react', company_id: 1, user_id: 19, user_ids: [19])
+
+
+user_ids = [20] # Substitua pelos IDs reais dos usuários
+
+# Encontrar o grupo específico pelo ID
+group = Group.find_by(id: 2)
+
+# Associar os usuários ao grupo
+if group
+  group.user_ids = user_ids
+  group.save
+  puts "Usuários adicionados ao grupo com sucesso!"
+else
+  puts "Grupo não encontrado!"
+end
